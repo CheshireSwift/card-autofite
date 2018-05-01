@@ -9,7 +9,10 @@ import Processor from './Processor'
 const generateSpyUnits = count => _(count)
   .range()
   .map(() => new Unit())
-  .map(unit => { unit.raise = jest.fn(() => ({ unit, events: [] })); return unit })
+  .map(unit => {
+    unit.raise = jest.fn(_.constant([]))
+    return unit
+  })
   .value()
 
 describe('the turn processor', () => {
@@ -46,23 +49,11 @@ describe('the turn processor', () => {
     })
   })
 
-  it('replaces units on the board with their updated copies', () => {
-    const newUnit = new Unit()
-    const oldUnit = units[0]
-    oldUnit.raise.mockImplementationOnce(() => ({
-      unit: newUnit, events: []
-    }))
-
-    expect(processor.board.absoluteUnitAt(positions[0])).toBe(newUnit)
-  })
-
   it('runs newly generated events as part of the turn', () => {
     const unit = units[0]
     const event = { unit, type: 'WIGGLE' }
-    unit.raise.mockImplementationOnce(() => ({
-      unit, events: [event],
-    }))
-
+    unit.raise.mockImplementationOnce(() => [event])
+    processor.runTurn()
     expect(unit.raise).toHaveBeenCalledWith(event)
   })
 
