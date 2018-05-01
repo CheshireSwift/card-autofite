@@ -3,7 +3,8 @@ const _ = require('lodash')
 
 import { type EventType, EventTypes } from './EventType'
 
-type GameEvent = {
+export type GameEvent = {
+  unit: Unit,
   type: EventType,
   data?: any,
 }
@@ -34,10 +35,13 @@ export class Unit {
     return handler ? handler(event.data) : { unit: this, events: [] }
   }
 
-  DAMAGE: Handler<DamageData> = ({ damage }) => ({
-    unit: this.clone({ health: this.health - damage }),
-    events: damage >= this.health ? [{ type: EventTypes.DEATH, data: { preUnit: this } }] : [],
-  })
+  DAMAGE: Handler<DamageData> = ({ damage }) => {
+    const unit = this.clone({ health: this.health - damage })
+    return {
+      unit,
+      events: damage >= this.health ? [{ unit, type: EventTypes.DEATH }] : [],
+    }
+  }
 }
 
 export default Unit

@@ -11,7 +11,7 @@ describe('the Sadbag', () => {
 
   it('loses 1 HP each turn', () => {
     const initialSadbag = new Sadbag()
-    const { unit: resolvedSadbag } = initialSadbag.raise({ type: EventTypes.TURN_START })
+    const { unit: resolvedSadbag } = initialSadbag.raise({ unit: initialSadbag, type: EventTypes.TURN_START })
     expect(resolvedSadbag.health).toBe(2)
   })
 })
