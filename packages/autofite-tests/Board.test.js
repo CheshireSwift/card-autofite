@@ -1,9 +1,7 @@
 /* @flow */
-import Unit from './Unit'
+import Unit from '../autofite-engine/Unit'
 
-import Board from './Board'
-
-import diff from 'jest-diff'
+import Board from '../autofite-engine/Board'
 
 describe('the board', () => {
   it('specifies the width and height of a grid', () => {

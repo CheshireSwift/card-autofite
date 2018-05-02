@@ -3,6 +3,7 @@
 [include]
 
 [libs]
+./flow-typed/npm/lodash_v4.x.x.js
 
 [lints]
 

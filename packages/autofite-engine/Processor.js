@@ -2,9 +2,9 @@
 import _ from 'lodash'
 
 import EventTypes from './EventType'
-import {type Formation} from './Formation'
+import { type Formation } from './Formation'
 import Board from './Board'
-import {type GameEvent} from './Unit'
+import { type GameEvent } from './Unit'
 
 export class Processor {
   board: Board

@@ -1,19 +1,9 @@
 /* @flow */
-import _ from 'lodash'
+import EventTypes from '../autofite-engine/EventType'
 
-import EventTypes from './EventType'
-import Unit from './Unit'
+import SpyUnit from './SpyUnit'
 
-import Processor from './Processor'
-
-const generateSpyUnits = count => _(count)
-  .range()
-  .map(() => new Unit())
-  .map(unit => {
-    unit.raise = jest.fn(_.constant([]))
-    return unit
-  })
-  .value()
+import Processor from '../autofite-engine/Processor'
 
 describe('the turn processor', () => {
   let processor
@@ -21,7 +11,7 @@ describe('the turn processor', () => {
   let positions
 
   beforeEach(() => {
-    units = generateSpyUnits(3)
+    units = [new SpyUnit(), new SpyUnit(), new SpyUnit()]
     positions = [
       [0, 1],
       [1, 1],

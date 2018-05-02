@@ -1,5 +1,5 @@
 /* @flow */
-const Infantry = require('./Infantry')
+import Infantry from '../autofite-engine/Infantry'
 
 xdescribe('infantry', () => {
   it('attacks the square in front', () => {

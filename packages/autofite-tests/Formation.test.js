@@ -1,7 +1,7 @@
 /* @flow */
-import Unit from './Unit'
+import Unit from '../autofite-engine/Unit'
 
-import * as Formation from './Formation'
+import * as Formation from '../autofite-engine/Formation'
 
 describe('a formation', () => {
   describe('being validated', () => {

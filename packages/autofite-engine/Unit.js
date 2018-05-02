@@ -13,16 +13,16 @@ type DamageData = { damage: number }
 
 export type Handler<D> = D => ?Array<GameEvent>
 
-type UnitData = { maxHealth?: number, health?: number }
-
 export class Unit {
+  static maxHealth = 0
+
   health: number
   maxHealth: number
   $key: EventType; $value: any
 
-  constructor(data: UnitData = {}) {
-    this.maxHealth = data.maxHealth || 0
-    this.health = data.health || this.maxHealth
+  constructor() {
+    this.maxHealth = this.constructor.maxHealth
+    this.health = this.maxHealth
   }
 
   raise(event: GameEvent): Array<GameEvent> {

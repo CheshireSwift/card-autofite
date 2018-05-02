@@ -1,0 +1,10 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype"
+  ],
+  "env": {
+   "jest": true
+  },
+  "extends": "cheshireswift"
+}

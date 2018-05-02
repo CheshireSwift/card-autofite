@@ -1,7 +1,7 @@
 /* @flow */
-import EventTypes from './EventType'
+import EventTypes from '../autofite-engine/EventType'
 
-import Sadbag from './Sadbag'
+import Sadbag from '../autofite-engine/Sadbag'
 
 describe('the Sadbag', () => {
   it('starts at 3 HP', () => {

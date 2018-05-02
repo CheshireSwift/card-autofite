@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "autofite-tests",
+  "version": "0.0.1-0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autofite-engine": "^0.0.1-0"
+  }
+}
