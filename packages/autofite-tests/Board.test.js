@@ -18,15 +18,14 @@ describe('the board', () => {
 
     const board = new Board([
       [
-        { unit: units[0], position: [0,0] },
-        { unit: units[1], position: [1,0] },
+        { unit: units[0], position: [ 0, 0 ] },
+        { unit: units[1], position: [ 1, 0 ] },
       ],
       [
-        { unit: units[2], position: [2,0] },
+        { unit: units[2], position: [ 2, 0 ] },
       ],
     ])
 
     expect(new Set(board.units)).toEqual(new Set(units))
   })
 })
-

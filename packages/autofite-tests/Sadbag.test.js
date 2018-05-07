@@ -15,4 +15,3 @@ describe('the Sadbag', () => {
     expect(sadbag.health).toBe(2)
   })
 })
-

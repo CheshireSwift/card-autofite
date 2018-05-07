@@ -11,11 +11,11 @@ describe('the turn processor', () => {
   let positions
 
   beforeEach(() => {
-    units = [new SpyUnit(), new SpyUnit(), new SpyUnit()]
+    units = [ new SpyUnit(), new SpyUnit(), new SpyUnit() ]
     positions = [
-      [0, 1],
-      [1, 1],
-      [1, 0],
+      [ 0, 1 ],
+      [ 1, 1 ],
+      [ 1, 0 ],
     ]
 
     processor = new Processor({
@@ -42,7 +42,7 @@ describe('the turn processor', () => {
   it('runs newly generated events as part of the turn', () => {
     const unit = units[0]
     const event = { unit, type: 'WIGGLE' }
-    unit.raise.mockImplementationOnce(() => [event])
+    unit.raise.mockImplementationOnce(() => [ event ])
     processor.runTurn()
     expect(unit.raise).toHaveBeenCalledWith(event)
   })

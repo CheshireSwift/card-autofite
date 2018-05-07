@@ -14,6 +14,6 @@ const positionIsValid = ({ position }) => {
   return true
 }
 
-const containsNoDupes = formation => _(formation).countBy(({ position: [x, y] }) => `${x},${y}`).every(count => count <= 1)
+const containsNoDupes = formation => _(formation).countBy(({ position: [ x, y ] }) => `${x},${y}`).every(count => count <= 1)
 
-export const isValid = (formation: Formation): bool => _.every(formation, positionIsValid) && containsNoDupes(formation)
+export const isValid = (formation: Formation): boolean => _.every(formation, positionIsValid) && containsNoDupes(formation)

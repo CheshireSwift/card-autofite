@@ -19,11 +19,11 @@ export class Board {
       Array(Board.gridHeight).fill(null)
     )
 
-    const [leftFormation, rightFormation] = formations
-    _.forEach(leftFormation, ({ unit, position: [x, y] }) => {
+    const [ leftFormation, rightFormation ] = formations
+    _.forEach(leftFormation, ({ unit, position: [ x, y ] }) => {
       this.grid[x][y] = unit
     })
-    _.forEach(rightFormation, ({ unit, position: [x, y] }) => {
+    _.forEach(rightFormation, ({ unit, position: [ x, y ] }) => {
       this.grid[Board.gridWidth + x][y] = unit
     })
   }
