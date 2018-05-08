@@ -67,4 +67,18 @@ describe('the turn processor', () => {
 
     expect(listenerUnit.raise).toHaveBeenCalledWith(event)
   })
+
+  it('checks for dead units when the queue is empty and removes them', () => {
+    units[0].health = 0
+    processor.runTurn()
+    expect(processor.board.units).not.toContain(units[0])
+  })
+
+  it('raises death events for dead units and reruns the queue as required', () => {
+    units[0].health = 0
+    const raise = jest.fn()
+    processor.hub.addListeners([ ({ raise, listenFor: [ EventTypes.DEATH ] }: any) ])
+    processor.runTurn()
+    expect(raise).toHaveBeenCalledWith({ unit: units[0], type: EventTypes.DEATH })
+  })
 })

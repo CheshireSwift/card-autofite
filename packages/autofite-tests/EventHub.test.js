@@ -28,9 +28,23 @@ describe('the event hub', () => {
     const otherUnit = new ListenerUnit()
 
     const event = { unit, type: 'WIBBLE' }
-    eventHub.addListener(otherUnit)
+    eventHub.addListeners([ otherUnit ])
     eventHub.raise(event)
 
     expect(otherUnit.raise).toHaveBeenLastCalledWith(event)
+  })
+
+  it('runs events from the queue until there are none left', () => {
+    const eventHub = new EventHub()
+    const unit = new SpyUnit()
+    unit.raise.mockImplementationOnce(() => [ secondEvent ])
+    const firstEvent = { unit, type: 'WIBBLE' }
+    const secondEvent = { unit, type: 'BIBBLE' }
+
+    eventHub.push([ firstEvent ])
+    eventHub.resolveQueue()
+
+    expect(eventHub.queue).toHaveLength(0)
+    expect(unit.raise).toHaveBeenCalledTimes(2)
   })
 })

@@ -4,39 +4,29 @@ import _ from 'lodash'
 import EventTypes from './EventType'
 import { type Formation } from './Formation'
 import Board from './Board'
-import { type GameEvent } from './Unit'
 import EventHub from './EventHub'
 
 export class Processor {
   board: Board
-  queue: Array<GameEvent>
   hub: EventHub
 
   constructor({ formations }: { formations: [Formation, Formation] }) {
-    this.board = new Board(formations)
-    this.queue = []
+    this.board = Board.makeBoard(formations)
     this.hub = new EventHub()
 
-    this.board.units.forEach(unit => {
-      this.hub.addListener(unit)
-    })
+    this.hub.addListeners(this.board.units)
   }
 
   runTurn() {
-    this.push(_.map(this.board.units, unit => ({ unit, type: EventTypes.TURN_START })))
-    this.resolveQueue()
-  }
+    const turnStartEvents = _.map(this.board.units, unit => (
+      { unit, type: EventTypes.TURN_START }
+    ))
+    this.hub.push(turnStartEvents)
 
-  push(events: Array<GameEvent>) {
-    this.queue.push(...events)
-  }
-
-  resolveQueue() {
-    let event
-    // eslint-disable-next-line no-cond-assign
-    while (event = this.queue.shift()) {
-      const events = this.hub.raise(event)
-      this.push(events)
+    while (this.hub.resolveQueue()) {
+      const { board, events } = this.board.checkState()
+      this.board = board
+      this.hub.push(events)
     }
   }
 }
