@@ -1,12 +1,12 @@
 /* @flow */
-import { Unit, type UnitData } from 'autofite-engine/Unit'
+import { Unit, type GameEvent } from 'autofite-engine/Unit'
 
 export class SpyUnit extends Unit {
-  constructor(params: UnitData) {
-    super(params)
+  constructor() {
+    super()
   }
 
-  raise = jest.fn(() => [])
+  raise: (GameEvent => Array<GameEvent>) = jest.fn(() => [])
 }
 
 export default SpyUnit

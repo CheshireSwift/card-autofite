@@ -18,11 +18,16 @@ export class Unit {
 
   health: number
   maxHealth: number
+  listenFor: ?$ReadOnlyArray<EventType>
   $key: EventType; $value: any
 
   constructor() {
     this.maxHealth = this.constructor.maxHealth
     this.health = this.maxHealth
+  }
+
+  get listenFor() {
+    return []
   }
 
   raise(event: GameEvent): Array<GameEvent> {

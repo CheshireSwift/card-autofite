@@ -1,9 +1,8 @@
 /* @flow */
-import EventTypes from '../autofite-engine/EventType'
-
+import EventTypes from 'autofite-engine/EventType'
 import SpyUnit from './SpyUnit'
 
-import Processor from '../autofite-engine/Processor'
+import Processor from 'autofite-engine/Processor'
 
 describe('the turn processor', () => {
   let processor
@@ -47,5 +46,25 @@ describe('the turn processor', () => {
     expect(unit.raise).toHaveBeenCalledWith(event)
   })
 
-  it('allows units to listen for a type of event raised on any unit') // handle "when another unit dies", "when a friendly unit takes damage", etc.
+  it('allows units to listen for a type of event raised on any unit', () => {
+    const WIGGLE = 'WIGGLE'
+    class ListenerUnit extends SpyUnit {
+      get listenFor() { return [ WIGGLE ] }
+    }
+
+    const listenerUnit = new ListenerUnit()
+    const unit = new SpyUnit()
+    const event = { unit, type: WIGGLE }
+    unit.raise.mockImplementationOnce(() => [ event ])
+
+    const processor = new Processor({
+      formations: [
+        [ { unit, position: positions[0] } ],
+        [ { unit: listenerUnit, position: positions[1] } ],
+      ],
+    })
+    processor.runTurn()
+
+    expect(listenerUnit.raise).toHaveBeenCalledWith(event)
+  })
 })

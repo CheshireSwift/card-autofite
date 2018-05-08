@@ -5,14 +5,21 @@ import EventTypes from './EventType'
 import { type Formation } from './Formation'
 import Board from './Board'
 import { type GameEvent } from './Unit'
+import EventHub from './EventHub'
 
 export class Processor {
   board: Board
   queue: Array<GameEvent>
+  hub: EventHub
 
   constructor({ formations }: { formations: [Formation, Formation] }) {
     this.board = new Board(formations)
     this.queue = []
+    this.hub = new EventHub()
+
+    this.board.units.forEach(unit => {
+      this.hub.addListener(unit)
+    })
   }
 
   runTurn() {
@@ -28,8 +35,7 @@ export class Processor {
     let event
     // eslint-disable-next-line no-cond-assign
     while (event = this.queue.shift()) {
-      const { unit } = event
-      const events = unit.raise(event)
+      const events = this.hub.raise(event)
       this.push(events)
     }
   }
