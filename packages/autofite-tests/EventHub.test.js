@@ -47,4 +47,16 @@ describe('the event hub', () => {
     expect(eventHub.queue).toHaveLength(0)
     expect(unit.raise).toHaveBeenCalledTimes(2)
   })
+
+  it('raises events on universal listeners', () => {
+    const listener = jest.fn()
+    const unit = new SpyUnit()
+    const event = { unit, type: 'WIBBLE' }
+
+    const eventHub = new EventHub()
+    eventHub.addUniversalListener(listener)
+    eventHub.raise(event)
+
+    expect(listener).toHaveBeenCalledWith(event)
+  })
 })

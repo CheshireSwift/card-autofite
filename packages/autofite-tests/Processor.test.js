@@ -68,6 +68,15 @@ describe('the turn processor', () => {
     expect(listenerUnit.raise).toHaveBeenCalledWith(event)
   })
 
+  it('allows universal event listeners to listen to events universally', () => {
+    const listener = jest.fn()
+    processor.addListener(listener)
+
+    processor.runTurn()
+
+    expect(listener).toHaveBeenCalledWith(expect.objectContaining({ type: EventTypes.TURN_START }))
+  })
+
   it('checks for dead units when the queue is empty and removes them', () => {
     units[0].health = 0
     processor.runTurn()

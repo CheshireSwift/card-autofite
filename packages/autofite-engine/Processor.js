@@ -4,7 +4,7 @@ import _ from 'lodash'
 import EventTypes from './EventType'
 import { type Formation } from './Formation'
 import Board from './Board'
-import EventHub from './EventHub'
+import { EventHub, type Listener } from './EventHub'
 
 export class Processor {
   static WinState = {
@@ -19,6 +19,10 @@ export class Processor {
     this.hub = new EventHub()
 
     this.hub.addListeners(this.board.units)
+  }
+
+  addListener(listener: Listener) {
+    this.hub.addUniversalListener(listener)
   }
 
   runTurn() {

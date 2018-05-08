@@ -3,8 +3,11 @@ import _ from 'lodash'
 import { Unit, type GameEvent } from './Unit'
 import { type EventType } from './EventType'
 
+export type Listener = GameEvent => void
+
 export class EventHub {
   listeners: { [EventType]: Set<Unit> }
+  universalListeners: Array<Listener> = []
   queue: Array<GameEvent> = []
 
   constructor() {
@@ -14,6 +17,10 @@ export class EventHub {
         return target[name]
       },
     })
+  }
+
+  addUniversalListener(listener: Listener) {
+    this.universalListeners.push(listener)
   }
 
   addListeners(units: Array<Unit>) {
@@ -44,8 +51,9 @@ export class EventHub {
   }
 
   raise(event: GameEvent): Array<GameEvent> {
-    const primaryEvents = event.unit.raise(event)
+    this.universalListeners.forEach(listener => listener(event))
 
+    const primaryEvents = event.unit.raise(event)
     const listeners: any = [ ...this.listeners[event.type] ]
     return [ ...primaryEvents, ..._.flatMap(listeners, listener => listener.raise(event)) ]
   }
