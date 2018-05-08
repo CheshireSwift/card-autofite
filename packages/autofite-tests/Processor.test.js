@@ -81,4 +81,12 @@ describe('the turn processor', () => {
     processor.runTurn()
     expect(raise).toHaveBeenCalledWith({ unit: units[0], type: EventTypes.DEATH })
   })
+
+  it('indicates the game has ended in a draw when all units are dead', () => {
+    processor.runTurn()
+    expect(processor.winState).toBe(null)
+    units.forEach(unit => { unit.health = 0 })
+    processor.runTurn()
+    expect(processor.winState).toBe(Processor.WinState.DRAW)
+  })
 })

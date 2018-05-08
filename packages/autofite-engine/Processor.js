@@ -7,6 +7,10 @@ import Board from './Board'
 import EventHub from './EventHub'
 
 export class Processor {
+  static WinState = {
+    DRAW: 'DRAW',
+  }
+
   board: Board
   hub: EventHub
 
@@ -28,6 +32,14 @@ export class Processor {
       this.board = board
       this.hub.push(events)
     }
+  }
+
+  get winState(): ?$Values<typeof Processor.WinState> {
+    if (_.isEmpty(this.board.units)) {
+      return Processor.WinState.DRAW
+    }
+
+    return null
   }
 }
 
