@@ -8,7 +8,9 @@ import { EventHub, type Listener } from './EventHub'
 
 export class Processor {
   static WinState = {
-    DRAW: 'DRAW',
+    DRAW: 'Draw',
+    PLAYER_1_WIN: 'Player 1 wins',
+    PLAYER_2_WIN: 'Player 2 wins',
   }
 
   board: Board
@@ -18,7 +20,7 @@ export class Processor {
     this.board = Board.makeBoard(formations)
     this.hub = new EventHub()
 
-    this.hub.addListeners(this.board.units)
+    this.hub.addListeners(this.board.units())
   }
 
   addListener(listener: Listener) {
@@ -26,12 +28,12 @@ export class Processor {
   }
 
   runTurn() {
-    const turnStartEvents = _.map(this.board.units, unit => (
+    const turnStartEvents = _.map(this.board.units(), unit => (
       { unit, type: EventTypes.TURN_START }
     ))
     this.hub.push(turnStartEvents)
 
-    while (this.hub.resolveQueue()) {
+    while (this.hub.resolveQueue(this.board)) {
       const { board, events } = this.board.checkState()
       this.board = board
       this.hub.push(events)
@@ -39,8 +41,16 @@ export class Processor {
   }
 
   get winState(): ?$Values<typeof Processor.WinState> {
-    if (_.isEmpty(this.board.units)) {
+    if (_.isEmpty(this.board.units())) {
       return Processor.WinState.DRAW
+    }
+
+    if (_.isEmpty(this.board.units(1))) {
+      return Processor.WinState.PLAYER_1_WIN
+    }
+
+    if (_.isEmpty(this.board.units(0))) {
+      return Processor.WinState.PLAYER_2_WIN
     }
 
     return null

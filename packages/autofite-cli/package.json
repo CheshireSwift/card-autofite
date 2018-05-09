@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "autofite-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autofite-engine": "^0.0.1-0",
+    "babel-cli": "^6.26.0",
+    "colors": "^1.2.5"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3"
+  }
+}

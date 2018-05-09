@@ -10,7 +10,7 @@ describe('the board', () => {
     expect(Board.gridHeight).toBeDefined()
   })
 
-  it('returns the list of units', () => {
+  describe('listing units', () => {
     const units = [
       new SpyUnit(),
       new SpyUnit(),
@@ -27,7 +27,14 @@ describe('the board', () => {
       ],
     ])
 
-    expect(new Set(board.units)).toEqual(new Set(units))
+    it('returns the list of units', () => {
+      expect(new Set(board.units())).toEqual(new Set(units))
+    })
+
+    it('returns the sublist of units for each player', () => {
+      expect(new Set(board.units(0))).toEqual(new Set([ units[0], units[1] ]))
+      expect(new Set(board.units(1))).toEqual(new Set([ units[2] ]))
+    })
   })
 
   describe('checking state', () => {
@@ -45,7 +52,12 @@ describe('the board', () => {
       })
 
       it('removes units with 0 health', () => {
-        expect(stateCheck.board.units).not.toContain(unit)
+        expect(stateCheck.board.units()).not.toContain(unit)
+      })
+
+      it('removes units with negative health', () => {
+        unit.health = -1
+        expect(dirtyBoard.checkState().board.units()).not.toContain(unit)
       })
 
       it('raises death events for removed units', () => {

@@ -34,7 +34,7 @@ describe('the turn processor', () => {
     processor.runTurn()
 
     units.forEach(unit => {
-      expect(unit.raise).toHaveBeenCalledWith({ unit, type: EventTypes.TURN_START })
+      expect(unit.raise).toHaveBeenCalledWith({ unit, type: EventTypes.TURN_START }, expect.anything())
     })
   })
 
@@ -43,7 +43,7 @@ describe('the turn processor', () => {
     const event = { unit, type: 'WIGGLE' }
     unit.raise.mockImplementationOnce(() => [ event ])
     processor.runTurn()
-    expect(unit.raise).toHaveBeenCalledWith(event)
+    expect(unit.raise).toHaveBeenCalledWith(event, expect.anything())
   })
 
   it('allows units to listen for a type of event raised on any unit', () => {
@@ -65,7 +65,7 @@ describe('the turn processor', () => {
     })
     processor.runTurn()
 
-    expect(listenerUnit.raise).toHaveBeenCalledWith(event)
+    expect(listenerUnit.raise).toHaveBeenCalledWith(event, expect.anything())
   })
 
   it('allows universal event listeners to listen to events universally', () => {
@@ -79,8 +79,10 @@ describe('the turn processor', () => {
 
   it('checks for dead units when the queue is empty and removes them', () => {
     units[0].health = 0
+    units[1].health = -1
     processor.runTurn()
-    expect(processor.board.units).not.toContain(units[0])
+    expect(processor.board.units()).not.toContain(units[0])
+    expect(processor.board.units()).not.toContain(units[1])
   })
 
   it('raises death events for dead units and reruns the queue as required', () => {
@@ -88,7 +90,7 @@ describe('the turn processor', () => {
     const raise = jest.fn()
     processor.hub.addListeners([ ({ raise, listenFor: [ EventTypes.DEATH ] }: any) ])
     processor.runTurn()
-    expect(raise).toHaveBeenCalledWith({ unit: units[0], type: EventTypes.DEATH })
+    expect(raise).toHaveBeenCalledWith({ unit: units[0], type: EventTypes.DEATH }, expect.anything())
   })
 
   it('indicates the game has ended in a draw when all units are dead', () => {
@@ -97,5 +99,13 @@ describe('the turn processor', () => {
     units.forEach(unit => { unit.health = 0 })
     processor.runTurn()
     expect(processor.winState).toBe(Processor.WinState.DRAW)
+  })
+
+  it('indicates the game has ended in a draw when all units for one player are dead', () => {
+    processor.runTurn()
+    expect(processor.winState).toBe(null)
+    units[2].health = 0
+    processor.runTurn()
+    expect(processor.winState).toBe(Processor.WinState.PLAYER_1_WIN)
   })
 })

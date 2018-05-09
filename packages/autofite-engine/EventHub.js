@@ -2,6 +2,7 @@
 import _ from 'lodash'
 import { Unit, type GameEvent } from './Unit'
 import { type EventType } from './EventType'
+import Board from './Board'
 
 export type Listener = GameEvent => void
 
@@ -35,7 +36,7 @@ export class EventHub {
     this.queue.push(...events)
   }
 
-  resolveQueue(): boolean {
+  resolveQueue(board: Board): boolean {
     if (!this.queue.length) {
       return false
     }
@@ -43,19 +44,19 @@ export class EventHub {
     let event
     // eslint-disable-next-line no-cond-assign
     while (event = this.queue.shift()) {
-      const events = this.raise(event)
+      const events = this.raise(event, board)
       this.push(events)
     }
 
     return true
   }
 
-  raise(event: GameEvent): Array<GameEvent> {
+  raise(event: GameEvent, board: Board): Array<GameEvent> {
     this.universalListeners.forEach(listener => listener(event))
 
-    const primaryEvents = event.unit.raise(event)
+    const primaryEvents = event.unit.raise(event, board)
     const listeners: any = [ ...this.listeners[event.type] ]
-    return [ ...primaryEvents, ..._.flatMap(listeners, listener => listener.raise(event)) ]
+    return [ ...primaryEvents, ..._.flatMap(listeners, (listener: Unit) => listener.raise(event, board)) ]
   }
 }
 

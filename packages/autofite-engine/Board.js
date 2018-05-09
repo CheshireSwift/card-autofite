@@ -35,12 +35,23 @@ export class Board {
     this.grid = grid
   }
 
-  get units() {
-    return _(this.grid).flatten().filter().value()
+  units(player?: 0 | 1) {
+    return this.subgrid(player).flatten().filter().value()
+  }
+
+  subgrid(player?: 0 | 1) {
+    switch (player) {
+      case 0:
+        return _(this.grid).dropRight(Board.gridWidth)
+      case 1:
+        return _(this.grid).drop(Board.gridWidth)
+      default:
+        return _(this.grid)
+    }
   }
 
   checkState(): { board: Board, events: Array<GameEvent> } {
-    const deadUnits = this.units.filter(unit => unit && unit.health === 0)
+    const deadUnits = this.units().filter(unit => unit && unit.health <= 0)
     const grid = this.grid.map(row => row.map(cell => deadUnits.includes(cell) ? null : cell))
 
     return {

@@ -20,9 +20,8 @@
   "version": "1.0.0",
   "main": "wallaby.js",
   "scripts": {
-    "lerna": "lerna",
     "test": "jest",
-    "flow": "flow"
+    "start": "babel-node packages/autofite-cli/index.js"
   },
   "repository": {
     "type": "git",
@@ -35,8 +34,5 @@
     "url": "https://github.com/CheshireSwift/card-autofite/issues"
   },
   "homepage": "https://github.com/CheshireSwift/card-autofite#readme",
-  "description": "",
-  "dependencies": {
-    "npm": "^6.0.0"
-  }
+  "description": ""
 }

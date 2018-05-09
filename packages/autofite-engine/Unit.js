@@ -2,16 +2,18 @@
 import _ from 'lodash'
 
 import { type EventType } from './EventType'
+import Board from './Board'
 
 export type GameEvent = {
   unit: Unit,
+  source?: Unit,
   type: EventType,
   data?: any,
 }
 
 type DamageData = { damage: number }
 
-export type Handler<D> = D => ?Array<GameEvent>
+export type Handler<D> = (Board, D) => ?Array<GameEvent>
 
 export class Unit {
   static maxHealth = 0
@@ -30,12 +32,12 @@ export class Unit {
     return []
   }
 
-  raise(event: GameEvent): Array<GameEvent> {
+  raise(event: GameEvent, board: Board): Array<GameEvent> {
     const handler: Handler<any> = (this[event.type]: ?Handler<any>) || _.constant()
-    return handler(event.data) || []
+    return _.forEach(handler(board, event.data), event => { event.source = this }) || []
   }
 
-  DAMAGE: Handler<DamageData> = ({ damage }) => {
+  DAMAGE: Handler<DamageData> = (board, { damage }) => {
     this.health -= damage
   }
 }
