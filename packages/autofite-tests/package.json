@@ -7,6 +7,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "autofite-engine": "^0.0.1-0"
+    "autofite-engine": "^0.0.1-0",
+    "babel-plugin-transform-class-properties": "^6.24.1"
   }
 }

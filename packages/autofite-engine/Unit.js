@@ -21,6 +21,7 @@ export class Unit {
 
   health: number
   maxHealth: number
+  player: 0 | 1
   listenFor: ?$ReadOnlyArray<EventType>
   $key: EventType; $value: any
 

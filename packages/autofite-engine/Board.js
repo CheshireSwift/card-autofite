@@ -29,9 +29,11 @@ export class Board {
 
     const [ leftFormation, rightFormation ] = formations
     _.forEach(leftFormation, ({ unit, position: [ x, y ] }) => {
+      unit.player = 0
       grid[x][y] = unit
     })
     _.forEach(rightFormation, ({ unit, position: [ x, y ] }) => {
+      unit.player = 1
       grid[reverse(x)][y] = unit
     })
 
@@ -68,7 +70,7 @@ export class Board {
   }
 
   perspectiveGrid(player: PlayerIndex): Array<Array<?Unit>> {
-    return player ? this.grid.reverse() : this.grid
+    return player ? this.grid.slice().reverse() : this.grid
   }
 
   location(unit: Unit): ?[number, number] {
@@ -82,9 +84,9 @@ export class Board {
     }
 
     const [ rawX, rootY ] = rootLocation
-    const unitOnFirstPlayerSide = rawX < Board.gridWidth
-    const rootX = unitOnFirstPlayerSide ? rawX : reverse(rawX)
-    const unitAtOffset = ([ dX, dY ]) => this.perspectiveGrid(unitOnFirstPlayerSide ? 0 : 1)[rootX + dX][rootY + dY]
+    const unitOnLeftSide = rawX < Board.gridWidth
+    const rootX = unitOnLeftSide ? rawX : reverse(rawX)
+    const unitAtOffset = ([ dX, dY ]) => this.perspectiveGrid(unitOnLeftSide ? 0 : 1)[rootX + dX][rootY + dY]
     return _(offsets)
       .map(unitAtOffset)
       .filter()

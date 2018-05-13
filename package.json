@@ -34,5 +34,6 @@
     "url": "https://github.com/CheshireSwift/card-autofite/issues"
   },
   "homepage": "https://github.com/CheshireSwift/card-autofite#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {}
 }
