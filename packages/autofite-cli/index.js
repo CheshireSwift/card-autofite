@@ -14,20 +14,20 @@ processor.addListener(event => {
   console.log(`${event.unit.constructor.name} experiences ${event.type}${event.source ? ` from ${event.source.constructor.name}` : ''}`)
 })
 
-console.log(processor.board.units().map(unit =>
-  `${unit.constructor.name}: ${unit.health}/${unit.maxHealth}`
-).join('\n'))
-
-while (!processor.winState) {
+function logState() {
   console.log('===================')
-
-  processor.runTurn()
-
+  console.log(render.grid(processor.board.grid))
   console.log(processor.board.units().map(unit =>
     `${unit.constructor.name}: ${unit.health}/${unit.maxHealth}`
   ).join('\n'))
+}
+
+while (!processor.winState) {
+  logState()
+  processor.runTurn()
 
   //require('child_process').spawnSync('read _ ', { shell: true, stdio: [ 0, 1, 2 ] })
 }
+logState()
 
 console.log(processor.winState)

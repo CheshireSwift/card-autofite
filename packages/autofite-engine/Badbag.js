@@ -2,7 +2,7 @@
 import { Unit, type Handler } from './Unit'
 import EventTypes from './EventType'
 
-export default class BadBag extends Unit {
+export default class Badbag extends Unit {
   static maxHealth = 3
   constructor() {
     super()
