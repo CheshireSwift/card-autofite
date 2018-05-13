@@ -2,11 +2,19 @@
 import Processor from 'autofite-engine/Processor'
 import Sadbag from 'autofite-engine/Sadbag'
 import Badbag from 'autofite-engine/Badbag'
+import Bigbag from 'autofite-engine/Bigbag'
+
+import * as render from './render'
 
 const processor = new Processor({
   formations: [
-    [ { unit: new Badbag(), position: [ 0, 0 ] } ],
-    [ { unit: new Sadbag(), position: [ 1, 1 ] } ],
+    [
+      { unit: new Badbag(), position: [ 0, 0 ] },
+    ],
+    [
+      { unit: new Sadbag(), position: [ 1, 1 ] },
+      { unit: new Bigbag(), position: [ 4, 3 ] },
+    ],
   ],
 })
 
