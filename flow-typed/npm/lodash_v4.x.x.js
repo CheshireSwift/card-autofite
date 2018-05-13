@@ -237,6 +237,11 @@ declare module "lodash" {
       predicate?: ?Predicate<T>,
       fromIndex?: ?number
     ): number;
+    findIndex<String>(
+      array: String,
+      predicate?: ?Predicate<String>,
+      fromIndex?: ?number
+    ): number;
     findIndex<T>(
       array: void | null,
       predicate?: ?Predicate<T>,
@@ -521,11 +526,16 @@ declare module "lodash" {
     eachRight<T: Object>(object: T, iteratee?: OIteratee<T>): T;
     every<T>(array?: ?$ReadOnlyArray<T>, iteratee?: ?Iteratee<T>): boolean;
     every<T: Object>(object: T, iteratee?: OIteratee<T>): boolean;
+    filter<T>(array?: ?Array<?T>): Array<T>;
     filter<T>(array?: ?Array<T>, predicate?: ?Predicate<T>): Array<T>;
     filter<A, T: { [id: string]: A }>(
       object: T,
       predicate?: OPredicate<A, T>
     ): Array<A>;
+    filter(
+      str: ?string,
+      predicate?: ?Predicate<string>
+    ): Array<string>;
     find<T>(
       array: $ReadOnlyArray<T>,
       predicate?: ?Predicate<T>,
@@ -629,10 +639,10 @@ declare module "lodash" {
       object: ?T,
       iteratee?: OMapIterator<V, T, U>
     ): Array<U>;
-    map(
+    map<T>(
       str: ?string,
-      iteratee?: (char: string, index: number, str: string) => any
-    ): string;
+      iteratee?: (char: string, index: number, str: string) => T
+    ): Array<T>;
     orderBy<T>(
       array: $ReadOnlyArray<T>,
       iteratees?: ?$ReadOnlyArray<Iteratee<T>> | ?string,

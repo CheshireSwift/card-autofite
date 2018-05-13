@@ -1,9 +1,16 @@
 /* @flow */
 import _ from 'lodash'
 
+import { findIndex2D } from './util'
 import { type Formation, isValid } from './Formation'
 import { Unit, type GameEvent } from './Unit'
 import EventTypes from './EventType'
+
+type PlayerIndex = 0 | 1
+
+function reverse(x) {
+  return 2 * Board.gridWidth - x - 1
+}
 
 export class Board {
   static gridWidth = 5
@@ -25,7 +32,7 @@ export class Board {
       grid[x][y] = unit
     })
     _.forEach(rightFormation, ({ unit, position: [ x, y ] }) => {
-      grid[Board.gridWidth + x][y] = unit
+      grid[reverse(x)][y] = unit
     })
 
     return new Board(grid)
@@ -35,11 +42,11 @@ export class Board {
     this.grid = grid
   }
 
-  units(player?: 0 | 1) {
+  units(player?: PlayerIndex) {
     return this.subgrid(player).flatten().filter().value()
   }
 
-  subgrid(player?: 0 | 1) {
+  subgrid(player?: PlayerIndex) {
     switch (player) {
       case 0:
         return _(this.grid).dropRight(Board.gridWidth)
@@ -58,6 +65,30 @@ export class Board {
       board: new Board(grid),
       events: deadUnits.map(unit => ({ unit, type: EventTypes.DEATH })),
     }
+  }
+
+  perspectiveGrid(player: PlayerIndex): Array<Array<?Unit>> {
+    return player ? this.grid.reverse() : this.grid
+  }
+
+  location(unit: Unit): ?[number, number] {
+    return findIndex2D(this.grid, unit)
+  }
+
+  unitsInRange(unit: Unit, offsets: $ReadOnlyArray<[number, number]>): Array<Unit> {
+    const rootLocation = this.location(unit)
+    if (!rootLocation) {
+      return []
+    }
+
+    const [ rawX, rootY ] = rootLocation
+    const unitOnFirstPlayerSide = rawX < Board.gridWidth
+    const rootX = unitOnFirstPlayerSide ? rawX : reverse(rawX)
+    const unitAtOffset = ([ dX, dY ]) => this.perspectiveGrid(unitOnFirstPlayerSide ? 0 : 1)[rootX + dX][rootY + dY]
+    return _(offsets)
+      .map(unitAtOffset)
+      .filter()
+      .value()
   }
 }
 

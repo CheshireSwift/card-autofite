@@ -1,6 +1,7 @@
 /* @flow */
 import _ from 'lodash'
 
+import { findIndex2D } from './util'
 import { type EventType } from './EventType'
 import Board from './Board'
 
@@ -22,6 +23,16 @@ export class Unit {
   maxHealth: number
   listenFor: ?$ReadOnlyArray<EventType>
   $key: EventType; $value: any
+
+  static range(diagram: string, sourceChar: string =  'O', targetChar: string = 'X'): Array<[number, number]> {
+    const rows = diagram.trim().split('\n').map(row => row.trim())
+    const [ rootY, rootX ] = findIndex2D(rows, sourceChar)
+    return _.flatten(_.map(rows, (row, y) =>
+      _.filter(_.map(row, (cell, x): ?[number, number] =>
+        cell === targetChar ? [ x - rootX, y - rootY ] : null
+      ))
+    ))
+  }
 
   constructor() {
     this.maxHealth = this.constructor.maxHealth

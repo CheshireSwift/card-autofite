@@ -20,4 +20,18 @@ describe('a unit', () => {
     unit.raise({ unit, type: 'DAMAGE', data: { damage: 2 } })
     expect(unit.health).toBe(1)
   })
+
+  it('generates ranges from diagrams', () => {
+    expect(new Set(Unit.range(`
+      XX.X.
+      .XOXX
+      X...X
+      .X...
+    `))).toEqual(new Set([
+      [ -2, -1 ], [ -1, -1 ], [ 1, -1 ],
+      [ -1, 0 ], [ 1, 0 ], [ 2, 0 ],
+      [ -2, 1 ], [ 2, 1 ],
+      [ -1, 2 ],
+    ]))
+  })
 })
