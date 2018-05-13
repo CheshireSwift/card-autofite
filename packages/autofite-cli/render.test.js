@@ -7,29 +7,23 @@ describe('text rendering the board', () => {
   it('generates colours for units by class', () => {
     class OneUnit extends Unit {}
     class TwoUnit extends Unit {}
-    expect(render.icon(new OneUnit())).toBe('O'.yellow.bold)
-    expect(render.icon(new TwoUnit())).toBe('T'.red.bold)
+    expect(render.icon(new OneUnit())).toBe('O'.bgMagenta.bold.black)
+    expect(render.icon(new TwoUnit())).toBe('T'.bgYellow.bold.black)
   })
 
-  it('dims low HP units', () => {
+  it('indicates low HP units', () => {
     const unit = new Unit()
     unit.maxHealth = 3
     unit.health = 1
-    expect(render.icon(unit)).toBe('U'.yellow.bold.dim)
+    expect(render.icon(unit)).toBe('U'.bgMagenta.bold.red)
   })
 
-  it('renders a plain green field for an empty grid', () => {
-    expect(render.grid([
-      [ null, null ],
-      [ null, null ],
-    ])).toBe('  \n  '.bgGreen)
-  })
+  it('uses icon overrides where specified', () => {
+    class PrettyUnit extends Unit {
+      static icon = '🤣'
+    }
 
-  it('renders units into the grid', () => {
-    const unitIcon = render.icon(new Unit())
-    expect(render.grid([
-      [ new Unit(), null ],
-      [ null, new Unit() ],
-    ])).toBe(`${unitIcon} \n ${unitIcon}`.bgGreen)
+    const unit = new PrettyUnit()
+    expect(render.icon(unit)).toBe(PrettyUnit.icon)
   })
 })
