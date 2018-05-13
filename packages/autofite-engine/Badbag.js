@@ -8,13 +8,12 @@ export default class Badbag extends Unit {
     super()
   }
 
-  TURN_START: Handler<void> = board => {
-    return board.units().map(unit => ({
-      unit,
-      type: EventTypes.DAMAGE,
-      data: {
-        damage: 1,
-      },
-    }))
-  }
+  TURN_START: Handler<void> = board =>
+    board.units().map(unit =>
+      ({
+        unit,
+        type: EventTypes.DAMAGE,
+        data: { damage: 1 },
+      })
+    )
 }

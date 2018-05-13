@@ -32,7 +32,7 @@ export class EventHub {
     })
   }
 
-  push(events: Array<GameEvent>) {
+  push(events: $ReadOnlyArray<GameEvent>) {
     this.queue.push(...events)
   }
 

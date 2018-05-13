@@ -57,7 +57,7 @@ export class Board {
     }
   }
 
-  checkState(): { board: Board, events: Array<GameEvent> } {
+  checkState(): { board: Board, events: $ReadOnlyArray<GameEvent> } {
     const deadUnits = this.units().filter(unit => unit && unit.health <= 0)
     const grid = this.grid.map(row => row.map(cell => deadUnits.includes(cell) ? null : cell))
 
