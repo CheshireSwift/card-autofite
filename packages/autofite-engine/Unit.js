@@ -2,7 +2,7 @@
 import _ from 'lodash'
 
 import { findIndex2D } from './util'
-import { type EventType } from './EventType'
+import { EventTypes, type EventType } from './EventType'
 import Board from './Board'
 
 export type GameEvent = {
@@ -46,6 +46,15 @@ export class Unit {
   raise(event: GameEvent, board: Board): Array<GameEvent> {
     const handler: Handler<any> = (this[event.type]: ?Handler<any>) || _.constant()
     return _.forEach(handler(board, event.data), event => { event.source = this }) || []
+  }
+
+  attack(board: Board, diagram: string, damage: number): Array<GameEvent>  {
+    const offsets = Unit.range(diagram)
+    return board.unitsInRange(this, offsets).map(target => ({
+      unit: target,
+      type: EventTypes.DAMAGE,
+      data: { damage },
+    }))
   }
 
   DAMAGE: Handler<DamageData> = (board, { damage }) => {

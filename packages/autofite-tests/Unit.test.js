@@ -1,4 +1,8 @@
 /* @flow */
+import _ from 'lodash'
+import Board from 'autofite-engine/Board'
+import EventTypes from 'autofite-engine/EventType'
+
 import Unit from 'autofite-engine/Unit'
 
 describe('a unit', () => {
@@ -33,5 +37,37 @@ describe('a unit', () => {
       [ -2, 1 ], [ 2, 1 ],
       [ -1, 2 ],
     ]))
+  })
+
+  describe('with helper methods', () => {
+    it('can define attacks easily', () => {
+      const damage = 2
+
+      class LobUnit extends Unit {
+        WAFFLE = board => this.attack(board, 'OXX', damage)
+      }
+
+      const unit = new LobUnit()
+
+      const targets = [ new Unit(), new Unit(), new Unit() ]
+      targets.forEach((u, i) => u.maxHealth = i)
+
+      const board = Board.makeBoard([
+        [ { unit, position: [ 4, 1 ] } ],
+        [
+          { unit: targets[0], position: [ 2, 1 ] },
+          { unit: targets[1], position: [ 3, 1 ] },
+          { unit: targets[2], position: [ 4, 1 ] },
+        ],
+      ])
+
+      const events = unit.raise({ type: 'WAFFLE' }, board)
+      const sortByHealth = e => _.sortBy(e, 'unit.maxHealth')
+
+      expect(sortByHealth(events)).toEqual(sortByHealth([
+        { unit: targets[1], source: unit, type: EventTypes.DAMAGE, data: { damage } },
+        { unit: targets[2], source: unit, type: EventTypes.DAMAGE, data: { damage } },
+      ]))
+    })
   })
 })
