@@ -17,6 +17,11 @@ describe('the turn processor', () => {
       [ 1, 0 ],
     ]
 
+    units.forEach(unit => {
+      unit.maxHealth = 5
+      unit.health = 5
+    })
+
     processor = new Processor({
       formations: [
         [
@@ -107,5 +112,41 @@ describe('the turn processor', () => {
     units[2].health = 0
     processor.runTurn()
     expect(processor.winState).toBe(Processor.WinState.PLAYER_1_WIN)
+  })
+
+  describe.only('loop detection', () => {
+    it('does not consider it to be a loop if something has changed', () => {
+      units[0].health = 1
+      processor.runTurn()
+      expect(processor.winState).toBe(null)
+
+      units[0].health = 2
+      processor.runTurn()
+      expect(processor.winState).toBe(null)
+    })
+
+    it('detects simple (adjacent turn) loops', () => {
+      processor.runTurn() // First turn stored
+      processor.runTurn() // Second turn unchanged
+      expect(processor.winState).toBe(Processor.WinState.DRAW)
+    })
+
+    it('detects extended (multi-turn) loops', () => {
+      units[0].health = 1
+      processor.runTurn()
+      expect(processor.winState).toBe(null)
+
+      units[0].health = 2
+      processor.runTurn()
+      expect(processor.winState).toBe(null)
+
+      units[0].health = 3
+      processor.runTurn()
+      expect(processor.winState).toBe(null)
+
+      units[0].health = 1
+      processor.runTurn()
+      expect(processor.winState).toBe(Processor.WinState.DRAW)
+    })
   })
 })

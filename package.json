@@ -21,7 +21,12 @@
   "main": "wallaby.js",
   "scripts": {
     "test": "jest",
-    "start": "babel-node packages/autofite-cli/index.js"
+    "test:watch": "jest --watch",
+    "start": "babel-node packages/autofite-cli/index.js",
+    "start:watch": "nodemon -x 'npm start'",
+    "postinstall": "lerna bootstrap",
+    "flow": "flow",
+    "flow:watch": "fswatch -o . | xargs -n1 -I{} sh -c 'clear; npm run flow'"
   },
   "repository": {
     "type": "git",

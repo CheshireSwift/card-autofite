@@ -110,7 +110,7 @@ describe('the board', () => {
     ]
 
     units.forEach((unit, i) => {
-      unit.maxHealth = i // identify units in failure diff
+      unit.state.maxHealth = i // identify units in failure diff
     })
 
     const board = Board.makeBoard([

@@ -19,8 +19,11 @@ export type Handler<D> = (Board, D) => ?Array<GameEvent>
 export class Unit {
   static maxHealth = 0
 
-  health: number
-  maxHealth: number
+  state: {
+    maxHealth: number,
+      health: number,
+  }
+
   player: 0 | 1
   listenFor: ?$ReadOnlyArray<EventType>
   $key: EventType; $value: any
@@ -36,12 +39,30 @@ export class Unit {
   }
 
   constructor() {
-    this.maxHealth = this.constructor.maxHealth
-    this.health = this.maxHealth
+    this.state = {
+      maxHealth: this.constructor.maxHealth,
+      health: this.constructor.maxHealth,
+    }
   }
 
   get listenFor() {
     return []
+  }
+
+  get health(): number {
+    return this.state.health
+  }
+
+  set health(v: number) {
+    this.state.health = v
+  }
+
+  get maxHealth(): number {
+    return this.state.maxHealth
+  }
+
+  set maxHealth(v: number) {
+    this.state.maxHealth = v
   }
 
   raise(event: GameEvent, board: Board): Array<GameEvent> {

@@ -1,5 +1,6 @@
 /* @flow */
 import _ from 'lodash'
+import hash from 'object-hash'
 
 import EventTypes from './EventType'
 import { type Formation } from './Formation'
@@ -15,6 +16,7 @@ export class Processor {
 
   board: Board
   hub: EventHub
+  turnHashes: Array<string> = []
 
   constructor({ formations }: { formations: [Formation, Formation] }) {
     this.board = Board.makeBoard(formations)
@@ -38,10 +40,27 @@ export class Processor {
       this.board = board
       this.hub.push(events)
     }
+
+    this.turnHashes.unshift(this.hash)
+  }
+
+  get hash(): string {
+    return hash({
+      hashGrid: this.board.grid.map(column =>
+        column.map(cell =>
+          cell && [
+            cell.constructor.name,
+            cell.state,
+          ]
+        )
+      ),
+    })
   }
 
   get winState(): ?$Values<typeof Processor.WinState> {
-    if (_.isEmpty(this.board.units())) {
+    const hashLength = this.turnHashes.length
+    const loopDetected = (hashLength > 1) && (hashLength !== _.uniq(this.turnHashes).length)
+    if (loopDetected || _.isEmpty(this.board.units())) {
       return Processor.WinState.DRAW
     }
 
