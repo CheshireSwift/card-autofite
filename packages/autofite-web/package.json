@@ -1,15 +1,28 @@
 {
-  "private": true,
   "name": "autofite-web",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "jest"
+    "build": "bankai build index.js",
+    "create": "choo-scaffold",
+    "inspect": "bankai inspect index.js",
+    "start": "bankai start index.js",
+    "test": "eslint '**/*.js' && npm run test-deps",
+    "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "choo": "^6.11.0-preview1",
+    "choo-service-worker": "^2.4.0",
+    "sheetify": "^7.3.2",
+    "tachyons": "^4.9.1"
+  },
   "devDependencies": {
-    "jest": "^22.4.4"
+    "bankai": "^9.12.1",
+    "choo-devtools": "^2.5.1",
+    "choo-scaffold": "^1.1.2",
+    "dependency-check": "^3.1.0",
+    "eslint": "^4.19.1",
+    "eslint-config-cheshireswift": "^5.2.0",
+    "eslint-plugin-flowtype": "^2.46.3"
   }
 }
