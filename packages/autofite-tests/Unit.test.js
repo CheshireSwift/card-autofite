@@ -25,6 +25,17 @@ describe('a unit', () => {
     expect(unit.health).toBe(1)
   })
 
+  it('resets to max health when overhealed', () => {
+    class SomeUnit extends Unit {
+      static maxHealth = 3
+    }
+
+    const unit = new SomeUnit()
+    unit.health = 5
+    unit.raise({ unit, type: 'OVERHEAL' })
+    expect(unit.health).toBe(unit.maxHealth)
+  })
+
   it('generates ranges from diagrams', () => {
     expect(new Set(Unit.range(`
       XX.X.
@@ -68,6 +79,30 @@ describe('a unit', () => {
         { unit: targets[1], source: unit, type: EventTypes.DAMAGE, data: { damage } },
         { unit: targets[2], source: unit, type: EventTypes.DAMAGE, data: { damage } },
       ]))
+    })
+  })
+
+  describe('checking its state', () => {
+    let unit
+
+    beforeEach(() => {
+      unit = new Unit()
+      unit.maxHealth = 1
+      unit.health = 1
+    })
+
+    it('raises no events by default', () => {
+      expect(unit.checkState()).toHaveLength(0)
+    })
+
+    it('raises death events when out of health', () => {
+      unit.health = 0
+      expect(unit.checkState()).toContainEqual({ unit, type: EventTypes.DEATH })
+    })
+
+    it('raises overheal events when over maximum health', () => {
+      unit.health = 2
+      expect(unit.checkState()).toContainEqual({ unit, type: EventTypes.OVERHEAL })
     })
   })
 })

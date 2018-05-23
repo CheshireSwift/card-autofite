@@ -36,9 +36,8 @@ export class Processor {
     this.hub.push(turnStartEvents)
 
     while (this.hub.resolveQueue(this.board)) {
-      const { board, events } = this.board.checkState()
-      this.board = board
-      this.hub.push(events)
+      const stateEvents = this.board.checkState()
+      this.hub.push(stateEvents)
     }
 
     this.turnHashes.unshift(this.hash)

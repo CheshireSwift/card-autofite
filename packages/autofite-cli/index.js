@@ -13,7 +13,7 @@ const processor = new Processor({
   formations: [
     [
       //{ unit: new Badbag(), position: [ 4, 0 ] },
-      //{ unit: new Badbag(), position: [ 2, 0 ] },
+      { unit: new Badbag(), position: [ 2, 0 ] },
       { unit: new Gladbag(), position: [ 4, 3 ] },
     ],
     [

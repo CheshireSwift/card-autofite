@@ -72,28 +72,47 @@ describe('the board', () => {
   describe('checking state', () => {
     describe('handling death', () => {
       let unit
-      let dirtyBoard
+      let board
       let stateCheck
 
       beforeEach(() => {
         unit = new SpyUnit()
         unit.health = 0
+        board = new Board([ [ unit ] ])
+
+        stateCheck = board.checkState()
+      })
+
+      it('removes units with 0 health', () => {
+        expect(board.units()).not.toContain(unit)
+      })
+
+      it('removes units with negative health', () => {
+        unit.health = -1
+        expect(board.units()).not.toContain(unit)
+      })
+
+      it('raises death events for removed units', () => {
+        expect(stateCheck).toContainEqual({ unit, type: EventTypes.DEATH })
+      })
+    })
+
+    describe('handling overhealing', () => {
+      let unit
+      let dirtyBoard
+      let stateCheck
+
+      beforeEach(() => {
+        unit = new SpyUnit()
+        unit.maxHealth = 3
+        unit.health = 5
         dirtyBoard = new Board([ [ unit ] ])
 
         stateCheck = dirtyBoard.checkState()
       })
 
-      it('removes units with 0 health', () => {
-        expect(stateCheck.board.units()).not.toContain(unit)
-      })
-
-      it('removes units with negative health', () => {
-        unit.health = -1
-        expect(dirtyBoard.checkState().board.units()).not.toContain(unit)
-      })
-
-      it('raises death events for removed units', () => {
-        expect(stateCheck.events).toEqual([ { unit, type: EventTypes.DEATH } ])
+      it('raises overheal events for the overhealed units', () => {
+        expect(stateCheck).toContainEqual({ unit, type: EventTypes.OVERHEAL })
       })
     })
   })

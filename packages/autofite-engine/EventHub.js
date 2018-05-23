@@ -56,7 +56,7 @@ export class EventHub {
 
     const primaryEvents = event.unit.raise(event, board)
     const listeners: any = [ ...this.listeners[event.type] ]
-    return [ ...primaryEvents, ..._.flatMap(listeners, (listener: Unit) => listener.raise(event, board)) ]
+    return [ ...primaryEvents, ..._.flatMap(listeners, (listener: Unit): Array<GameEvent> => listener.raise(event, board)) ]
   }
 }
 

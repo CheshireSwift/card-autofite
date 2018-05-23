@@ -30,7 +30,12 @@ export class Unit {
 
   static range(diagram: string, sourceChar: string =  'O', targetChar: string = 'X'): Array<[number, number]> {
     const rows = diagram.trim().split('\n').map(row => row.trim())
-    const [ rootY, rootX ] = findIndex2D(rows, sourceChar)
+    const rootLocation = findIndex2D(rows, sourceChar)
+    if (!rootLocation) {
+      return []
+    }
+
+    const [ rootY, rootX ] = rootLocation
     return _.flatten(_.map(rows, (row, y) =>
       _.filter(_.map(row, (cell, x): ?[number, number] =>
         cell === targetChar ? [ x - rootX, y - rootY ] : null
@@ -79,8 +84,19 @@ export class Unit {
     }))
   }
 
+  checkState(): Array<GameEvent> {
+    return _.filter([
+      this.health <= 0 && { unit: this, type: EventTypes.DEATH },
+      this.health > this.maxHealth && { unit: this, type: EventTypes.OVERHEAL },
+    ])
+  }
+
   DAMAGE: Handler<DamageData> = (board, { damage }) => {
     this.health -= damage
+  }
+
+  OVERHEAL: Handler<void> = () => {
+    this.health = this.maxHealth
   }
 }
 

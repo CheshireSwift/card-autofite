@@ -12,6 +12,16 @@ describe('findIndex2D', () => {
     expect(indices).toEqual([ 1, 2 ])
   })
 
+  it('returns null when unable to find an element in a nested array', () => {
+    const indices = findIndex2D([
+      [ 1, 2, 3 ],
+      [ 4, 5, 6 ],
+      [ 7, 8, 9 ],
+    ], 123)
+
+    expect(indices).toBe(null)
+  })
+
   it('finds characters in a string array', () => {
     const indices = findIndex2D([
       '123',

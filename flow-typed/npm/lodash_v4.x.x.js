@@ -194,6 +194,7 @@ declare module "lodash" {
   declare type Iteratee<T> = _Iteratee<T> | Object | string;
   declare type FlatMapIteratee<T, U> =
     | ((item: T, index: number, array: ?$ReadOnlyArray<T>) => Array<U>)
+    | ((item: T, index: number, array: ?$ReadOnlyArray<T>) => ?U)
     | Object
     | string;
   declare type Comparator<T> = (item: T, item2: T) => boolean;
@@ -526,8 +527,8 @@ declare module "lodash" {
     eachRight<T: Object>(object: T, iteratee?: OIteratee<T>): T;
     every<T>(array?: ?$ReadOnlyArray<T>, iteratee?: ?Iteratee<T>): boolean;
     every<T: Object>(object: T, iteratee?: OIteratee<T>): boolean;
-    filter<T>(array?: ?Array<?T>): Array<T>;
-    filter<T>(array?: ?Array<T>, predicate?: ?Predicate<T>): Array<T>;
+    filter<T>(array: Array<?T|false|0>): Array<T>;
+    filter<T>(array?: ?Array<T>, predicate: Predicate<T>): Array<T>;
     filter<A, T: { [id: string]: A }>(
       object: T,
       predicate?: OPredicate<A, T>
@@ -564,10 +565,10 @@ declare module "lodash" {
       array?: ?$ReadOnlyArray<T>,
       iteratee?: ?FlatMapIteratee<T, U>
     ): Array<U>;
-    flatMap<T: Object, U>(
-      object: T,
-      iteratee?: OFlatMapIteratee<T, U>
-    ): Array<U>;
+    //flatMap<T: Object, U>(
+    //  object: T,
+    //  iteratee?: OFlatMapIteratee<T, U>
+    //): Array<U>;
     flatMapDeep<T, U>(
       array?: ?$ReadOnlyArray<T>,
       iteratee?: ?FlatMapIteratee<T, U>

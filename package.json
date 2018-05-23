@@ -9,8 +9,7 @@
     "eslint": "^4.19.1",
     "eslint-config-cheshireswift": "^5.2.0",
     "eslint-plugin-flowtype": "^2.46.3",
-    "flow": "^0.2.3",
-    "flow-bin": "^0.71.0",
+    "flow-bin": "^0.72.0",
     "flow-typed": "^2.4.0",
     "flow-watch": "^1.1.3",
     "jest": "^22.4.3",
@@ -26,7 +25,7 @@
     "start:watch": "nodemon -x 'npm start'",
     "postinstall": "lerna bootstrap",
     "flow": "flow",
-    "flow:watch": "fswatch -o . | xargs -n1 -I{} sh -c 'clear; npm run flow'"
+    "flow:watch": "fswatch -o . | xargs -n1 -I{} sh -c 'clear;npm run flow'"
   },
   "repository": {
     "type": "git",

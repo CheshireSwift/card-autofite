@@ -4,7 +4,7 @@ import _ from 'lodash'
 import { findIndex2D } from './util'
 import { type Formation, isValid } from './Formation'
 import { Unit, type GameEvent } from './Unit'
-import EventTypes from './EventType'
+import { EventTypes, type EventType } from './EventType'
 
 type PlayerIndex = 0 | 1
 
@@ -59,14 +59,34 @@ export class Board {
     }
   }
 
-  checkState(): { board: Board, events: $ReadOnlyArray<GameEvent> } {
-    const deadUnits = this.units().filter(unit => unit && unit.health <= 0)
-    const grid = this.grid.map(row => row.map(cell => deadUnits.includes(cell) ? null : cell))
+  checkState(): $ReadOnlyArray<GameEvent> {
+    type LocEvent = { event: GameEvent, x: number, y: number }
 
-    return {
-      board: new Board(grid),
-      events: deadUnits.map(unit => ({ unit, type: EventTypes.DEATH })),
+    const stateHandlers: { [EventType]: LocEvent => void } = {
+      [EventTypes.DEATH]: ({ x, y }) => {
+        this.grid[x][y] = null
+      },
     }
+
+    const eventsInCell = (x: number) => (
+      (cell: ?Unit, y: number): Array<LocEvent> => (
+        cell ? cell.checkState().map(event => ({ event, x, y })) : []
+      )
+    )
+
+    const eventsInColumn  = (column: Array<?Unit>, x: number): Array<LocEvent> => (
+      _.flatMap(column, eventsInCell(x))
+    )
+
+    const grid = this.grid
+    const locEvents: Array<LocEvent> = _.flatMap(grid, eventsInColumn)
+
+    locEvents.forEach(locEvent => {
+      const handler = stateHandlers[(locEvent.event.type: string)]
+      handler && handler(locEvent)
+    })
+
+    return _.map(locEvents, 'event')
   }
 
   perspectiveGrid(player: PlayerIndex): Array<Array<?Unit>> {
