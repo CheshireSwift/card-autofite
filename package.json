@@ -39,5 +39,7 @@
   },
   "homepage": "https://github.com/CheshireSwift/card-autofite#readme",
   "description": "",
-  "dependencies": {}
+  "dependencies": {
+    "ramda": "^0.25.0"
+  }
 }
