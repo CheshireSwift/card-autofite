@@ -36,6 +36,8 @@ export class EventHub {
     this.queue.push(...events)
   }
 
+  // Runs the queue (adding any raised when processing them to the end) until it is empty.
+  // Returns whether or not there were any events to actually run.
   resolveQueue(board: Board): boolean {
     if (!this.queue.length) {
       return false
