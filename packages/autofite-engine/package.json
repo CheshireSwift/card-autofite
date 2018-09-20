@@ -12,12 +12,12 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-jest": "^22.4.3",
+    "babel-jest": "^23.6.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
-    "flow-bin": "^0.72.0",
-    "regenerator-runtime": "^0.11.1"
+    "flow-bin": "^0.81.0",
+    "regenerator-runtime": "^0.12.1"
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
