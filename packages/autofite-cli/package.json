@@ -19,6 +19,6 @@
     "strip-ansi": "^4.0.0"
   },
   "devDependencies": {
-    "jest": "^22.4.3"
+    "jest": "^23.6.0"
   }
 }
